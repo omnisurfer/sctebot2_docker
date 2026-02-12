@@ -1,0 +1,89 @@
+# https://github.com/sea-bass/turtlebot3_behavior_demos/blob/main/docker-compose.yaml
+services:
+  # base ros2 docker image
+  base:  
+    image: docker_ros2_test:base
+    container_name: docker_ros2_test_base_container
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        ROS_DISTRO: ${ROS_DISTRO:?}
+      target: base
+    stdin_open: true
+    tty: true
+
+    # Networking and IPC for ROS2
+    network_mode: host
+    ipc: host
+    # Needed to display graphical applications
+    privileged: True
+    gpus: all
+    environment:      
+      # Allows graphical programs in the container
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      # TODO: Figure out how to select based on AMD or NVIDIA
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+  
+  # project overlay docker image
+  overlay:
+    extends: base
+    container_name: docker_ros2_test_overlay_container
+    image: docker_ros2_test:overlay
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: overlay
+
+  # developer container
+  dev:
+    extends: overlay
+    container_name: docker_ros2_test_dev_container
+    image: docker_ros2_test:dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: dev
+    volumes:
+     # mount the source code
+      - ../sctebot2_robot:/overlay_ws/src/sctebot2_robot:rw
+      - ../sctebot2_desktop:/overlay_ws/src/sctebot2_desktop:rw
+    command: sleep infinity
+
+  # realsense overlay container
+  realsense_overlay:
+    extends: base
+    container_name: docker_ros2_test_realsense_overlay_container
+    image: docker_ros2_test:realsense_overlay    
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: realsense_overlay
+
+  # realsense node container
+  # Use v4l2-ctl --list-devices to figure out what /dev/videoX are associated with the RealSense Camera
+  realsense_node:
+    extends: realsense_overlay
+    container_name: docker_ros2_test_realsense_node_container
+    image: docker_ros2_test:realsense_node
+    devices:
+      - "/dev/bus/usb/006/003:/dev/bus/usb/006/003"
+      - "/dev/video4:/dev/video4"
+      - "/dev/video5:/dev/video5"
+      - "/dev/video6:/dev/video6"
+      - "/dev/video7:/dev/video7"
+      - "/dev/video8:/dev/video8"
+      - "/dev/video9:/dev/video9"
+      - "/dev/media1:/dev/media1"
+      - "/dev/media2:/dev/media2"
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: realsense_node
+    volumes:
+      - ../sctebot2_sensors/realsense-ros:/realsense_ws/src/realsense-ros:rw
+    command: sleep infinity
