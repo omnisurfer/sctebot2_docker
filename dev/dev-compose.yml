@@ -1,0 +1,17 @@
+services:
+  # developer container
+  dev:
+    extends: 
+      file: ../base/base-compose.yml
+      service: overlay
+    container_name: docker_ros2_test_dev_container
+    image: docker_ros2_test:dev
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile
+      target: dev
+    volumes:
+     # mount the source code
+      - ../../sctebot2_robot:/overlay_ws/src/sctebot2_robot:rw
+      - ../../sctebot2_desktop:/overlay_ws/src/sctebot2_desktop:rw
+    command: sleep infinity

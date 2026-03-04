@@ -50,7 +50,7 @@ ENV SCTEBOT2_MODEL=1
 
 # Set up the entrypoint
 WORKDIR /docker_ros2_ws
-COPY ./docker/entrypoint.sh /
+COPY ./docker_files/entrypoint.sh /
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 ####################
@@ -70,7 +70,7 @@ RUN . /docker_ros2_ws/install/setup.bash \
   && colcon build --symlink-install
 
 # Set up the entrypoint
-COPY ./docker/entrypoint.sh /
+COPY ./docker_files/entrypoint.sh /
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 ####################
@@ -135,7 +135,7 @@ RUN . /docker_ros2_ws/install/setup.bash \
   && . /realsense_ws/install/setup.bash
 
 # Set up the entrypoint
-COPY ./docker/entrypoint.sh /
+COPY ./docker_files/entrypoint.sh /
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 ####################

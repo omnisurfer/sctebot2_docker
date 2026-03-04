@@ -1,0 +1,39 @@
+services:
+  # base ros2 docker image
+  base:  
+    image: docker_ros2_test:base
+    container_name: docker_ros2_test_base_container
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile
+      args:
+        ROS_DISTRO: ${ROS_DISTRO:?}
+      target: base
+    stdin_open: true
+    tty: true
+
+    # Networking and IPC for ROS2
+    network_mode: host
+    ipc: host
+    # Needed to display graphical applications
+    privileged: True
+    gpus: all
+    environment:      
+      # Allows graphical programs in the container
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      # TODO: Figure out how to select based on AMD or NVIDIA
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+  
+  # project overlay docker image
+  overlay:
+    extends: base
+    container_name: docker_ros2_test_overlay_container
+    image: docker_ros2_test:overlay
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile
+      target: overlay
