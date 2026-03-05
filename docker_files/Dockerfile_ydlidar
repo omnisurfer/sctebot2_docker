@@ -1,0 +1,54 @@
+####################
+### YDLIDAR OVERLAY
+####################
+FROM sctebot2_ros2_jazzy_base:latest AS ydlidar_overlay
+
+# RUN sudo apt-get install udev
+
+RUN mkdir -p /ydlidar_sdk/src
+WORKDIR /ydlidar_sdk/src
+RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git \
+    && mkdir YDLidar-SDK/build \
+    && cd YDLidar-SDK/build \
+    && cmake .. \
+    && make \
+    && sudo make install
+
+RUN mkdir -p /ydlidar_ws/src
+WORKDIR /ydlidar_ws
+RUN . /docker_ros2_ws/install/setup.bash \
+    && rosdep update \
+    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+    && colcon build --symlink-install \    
+    && . /ydlidar_ws/install/setup.bash
+
+####################
+### YDLIDAR NODE
+####################
+FROM ydlidar_overlay AS ydlidar_node
+
+# ydlidar container arguments
+ARG USERNAME=ydlidar_user
+ARG UID=1000
+ARG GID=${UID}
+
+# In Ubuntu 24.04, there is already a user named "ubuntu" with UID 1000.
+# Delete this in the (common) event that the user on the host also has this UID.
+RUN touch /var/mail/ubuntu \
+    && chown ubuntu /var/mail/ubuntu \
+    && userdel -r ubuntu
+
+# Create new user and home directory
+RUN groupadd --gid $GID $USERNAME \
+    && useradd --uid ${GID} --gid ${UID} --create-home ${USERNAME} \
+    && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+    && chmod 0440 /etc/sudoers.d/${USERNAME} \
+    && mkdir -p /home/${USERNAME} \
+    && chown -R ${UID}:${GID} /home/${USERNAME}
+
+# Set the ownership of the overlay workspace to the new user
+RUN chown -R ${UID}:${GID} /ydlidar_ws/
+
+# Set up the entrypoint, including it in the .bashrc for interactive shells
+USER ${USERNAME}
+RUN echo "source /entrypoint.sh" >> /home/${USERNAME}/.bashrc

@@ -1,0 +1,27 @@
+services:
+  # ydlidar overlay container
+  ydlidar_overlay:    
+    extends: 
+      file: jazzy-base-compose.yml
+      service: jazzy_overlay
+    container_name: sctebot2_ros2_ydlidar_overlay
+    image: sctebot2_ros2_ydlidar_overlay:latest
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile_ydlidar
+      target: ydlidar_overlay
+
+  # ydlidar node container  
+  ydlidar_node:
+    extends: ydlidar_overlay
+    container_name: sctebot2_ros2_ydlidar_node
+    image: sctebot2_ros2_ydlidar_node:latest
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile_ydlidar
+      target: ydlidar_node
+    volumes:
+      - ../../sctebot2_sensors/ydlidar_ros2_driver:/ydlidar_ws/src/ydlidar_ros2_driver:rw
+    command: sleep infinity
