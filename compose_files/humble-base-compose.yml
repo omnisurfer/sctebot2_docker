@@ -5,7 +5,7 @@ services:
     container_name: sctebot2_ros2_hubmle_base
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_humble_base
+      dockerfile: docker_files/Dockerfile.humble_base
       args:
         ROS_DISTRO: ${ROS_DISTRO:?}
       target: humble_base
@@ -35,5 +35,5 @@ services:
     image: sctebot2_ros2_humble_overlay:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_humble_base
+      dockerfile: docker_files/Dockerfile.humble_base
       target: humble_overlay

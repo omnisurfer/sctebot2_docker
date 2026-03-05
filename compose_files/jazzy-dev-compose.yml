@@ -8,7 +8,7 @@ services:
     image: sctebot2_ros2_jazzy_dev:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_jazzy_dev
+      dockerfile: docker_files/Dockerfile.jazzy_dev
       target: jazzy_dev
     volumes:
      # mount the source code

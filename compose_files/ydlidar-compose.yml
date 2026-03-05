@@ -8,7 +8,7 @@ services:
     image: sctebot2_ros2_ydlidar_overlay:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_ydlidar
+      dockerfile: docker_files/Dockerfile.ydlidar
       target: ydlidar_overlay
 
   # ydlidar node container  
@@ -20,7 +20,7 @@ services:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_ydlidar
+      dockerfile: docker_files/Dockerfile.ydlidar
       target: ydlidar_node
     volumes:
       - ../../sctebot2_sensors/ydlidar_ros2_driver:/ydlidar_ws/src/ydlidar_ros2_driver:rw

@@ -8,7 +8,7 @@ services:
     image: sctebot2_ros2_realsense_overlay:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_realsense
+      dockerfile: docker_files/Dockerfile.realsense
       target: realsense_overlay
 
   # realsense node container
@@ -29,7 +29,7 @@ services:
       - "/dev/media2:/dev/media2"
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_realsense
+      dockerfile: docker_files/Dockerfile.realsense
       target: realsense_node
     volumes:
       - ../../sctebot2_sensors/realsense-ros:/realsense_ws/src/realsense-ros:rw

@@ -1,0 +1,7 @@
+# https://github.com/sea-bass/turtlebot3_behavior_demos/blob/main/docker-compose.yaml
+include:
+  - base-compose.yml
+    
+  # sensors
+  - compose_files/realsense-compose.yml
+  - compose_files/ydlidar-compose.yml

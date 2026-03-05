@@ -8,7 +8,7 @@ services:
     image: sctebot2_ros2_humble_dev:latest    
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_humble_dev
+      dockerfile: docker_files/Dockerfile.humble_dev
       target: humble_dev
     volumes:
      # mount the source code

@@ -5,7 +5,7 @@ services:
     container_name: sctebot2_ros2_jazzy_base
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_jazzy_base
+      dockerfile: docker_files/Dockerfile.jazzy_base
       args:
         ROS_DISTRO: ${ROS_DISTRO:?}
       target: jazzy_base
@@ -35,5 +35,5 @@ services:
     image: sctebot2_ros2_jazzy_overlay:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile_jazzy_base
+      dockerfile: docker_files/Dockerfile.jazzy_base
       target: jazzy_overlay
