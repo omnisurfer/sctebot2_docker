@@ -1,0 +1,60 @@
+####################
+### REALSENSE OVERLAY
+####################
+FROM sctebot2_ros2_jazzy_base:latest AS realsense_overlay
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libglfw3 libglfw3-dev ros-${ROS_DISTRO}-diagnostic-updater
+
+# Install Realsense SDK https://github.com/realsenseai/librealsense/blob/v2.56.4/doc/distribution_linux.md
+RUN mkdir -p /etc/apt/keyrings \
+  && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null \
+  && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+  sudo tee /etc/apt/sources.list.d/librealsense.list \
+  && apt-get update
+
+RUN apt-get update && apt-get install -y librealsense2 ros-jazzy-realsense2-*
+
+RUN mkdir -p /realsense_ws/src
+WORKDIR /realsense_ws
+
+RUN . /docker_ros2_ws/install/setup.bash \
+  && rosdep update \
+  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+  && colcon build --symlink-install \
+  && . /realsense_ws/install/setup.bash
+
+# Set up the entrypoint
+COPY ../docker_files/scripts/entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+####################
+### REALSENSE NODE
+####################
+FROM realsense_overlay AS realsense_node
+
+# realsense container arguments
+ARG USERNAME=realsense_user
+ARG UID=1000
+ARG GID=${UID}
+
+# In Ubuntu 24.04, there is already a user named "ubuntu" with UID 1000.
+# Delete this in the (common) event that the user on the host also has this UID.
+RUN touch /var/mail/ubuntu \
+  && chown ubuntu /var/mail/ubuntu \
+  && userdel -r ubuntu
+
+# Create new user and home directory
+RUN groupadd --gid $GID $USERNAME \
+  && useradd --uid ${GID} --gid ${UID} --create-home ${USERNAME} \
+  && echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USERNAME} \
+  && chmod 0440 /etc/sudoers.d/${USERNAME} \
+  && mkdir -p /home/${USERNAME} \
+  && chown -R ${UID}:${GID} /home/${USERNAME}
+
+# Set the ownership of the overlay workspace to the new user
+RUN chown -R ${UID}:${GID} /realsense_ws/
+
+# Set up the entrypoint, including it in the .bashrc for interactive shells
+USER ${USERNAME}
+RUN echo "source /entrypoint.sh" >> /home/${USERNAME}/.bashrc

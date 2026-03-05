@@ -1,0 +1,17 @@
+services:
+  # developer container
+  jazzy_dev:
+    extends: 
+      file: jazzy-base-compose.yml
+      service: jazzy_overlay
+    container_name: sctebot2_ros2_jazzy_dev
+    image: sctebot2_ros2_jazzy_dev:latest
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile_jazzy_dev
+      target: jazzy_dev
+    volumes:
+     # mount the source code
+      - ../../sctebot2_robot:/overlay_ws/src/sctebot2_robot:rw
+      - ../../sctebot2_desktop:/overlay_ws/src/sctebot2_desktop:rw
+    command: sleep infinity

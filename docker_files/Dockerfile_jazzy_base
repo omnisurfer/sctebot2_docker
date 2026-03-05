@@ -1,0 +1,71 @@
+# ref: 
+# https://roboticseabass.com/2023/07/09/updated-guide-docker-and-ros2/
+# https://github.com/sea-bass/turtlebot3_behavior_demos/blob/main/dependencies.repos
+ARG DOCKER_ROS_DISTRO=jazzy
+
+# ref: 
+# https://roboticseabass.com/2021/04/21/docker-and-ros/
+####################
+# NVIDIA BASE IMAGE
+####################
+# none
+
+# sudo apt update && sudo apt install curl -y
+# export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+# curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb"
+# sudo dpkg -i /tmp/ros2-apt-source.deb
+
+####################
+### BASE IMAGE
+####################
+FROM ros:${DOCKER_ROS_DISTRO} AS jazzy_base
+# THIS IS SET BY THE ROS BASED IMAGE
+# ENV ROS_DISTRO=${DOCKER_ROS_DISTRO}
+SHELL ["/bin/bash", "-c"]
+
+# Install packages #
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  bash curl git wget rsync unzip apt-transport-https \
+  libqt5svg5-dev python3-pip python3-tk python3-pyqt5.qtwebengine
+
+# Install python modules
+# none
+
+# Modify DDS middleware
+# none
+
+# Create Colcon workspace with external dependencies
+RUN mkdir -p /docker_ros2_ws/src
+WORKDIR /docker_ros2_ws/src
+COPY dependencies.repos .
+RUN vcs import < dependencies.repos
+
+# Build the base Colcon workspace, installing dependencies first.
+WORKDIR /docker_ros2_ws
+RUN . /opt/ros/${ROS_DISTRO}/setup.bash \
+  && apt-get update -y \
+  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+  && colcon build --symlink-install
+ENV SCTEBOT2_MODEL=1
+
+# Set up the entrypoint
+WORKDIR /docker_ros2_ws
+COPY ./docker_files/scripts/entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+####################
+### OVERYLAY IMAGE
+####################
+FROM jazzy_base AS jazzy_overlay
+
+# Create an onverlay Colcon workspace
+RUN mkdir -p /overlay_ws/src
+WORKDIR /overlay_ws
+
+RUN . /docker_ros2_ws/install/setup.bash \
+  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+  && colcon build --symlink-install
+
+# Set up the entrypoint
+COPY ./docker_files/scripts/entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]

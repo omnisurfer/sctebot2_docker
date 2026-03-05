@@ -1,0 +1,39 @@
+services:
+  # base ros2 docker image
+  humble_base:
+    image: sctebot2_ros2_humble_base:latest
+    container_name: sctebot2_ros2_hubmle_base
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile_humble_base
+      args:
+        ROS_DISTRO: ${ROS_DISTRO:?}
+      target: humble_base
+    stdin_open: true
+    tty: true
+
+    # Networking and IPC for ROS2
+    network_mode: host
+    ipc: host
+    # Needed to display graphical applications
+    privileged: True
+    gpus: all
+    environment:      
+      # Allows graphical programs in the container
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      # TODO: Figure out how to select based on AMD or NVIDIA
+      - NVIDIA_DRIVER_CAPABILITIES=all
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+  
+  # project overlay docker image
+  humble_overlay:
+    extends: humble_base
+    container_name: sctebot2_ros2_humble_overlay
+    image: sctebot2_ros2_humble_overlay:latest
+    build:
+      context: ../
+      dockerfile: docker_files/Dockerfile_humble_base
+      target: humble_overlay

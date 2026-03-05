@@ -1,15 +1,15 @@
 services:
   # developer container
-  dev:
+  humble_dev:
     extends: 
-      file: ../base/base-compose.yml
-      service: overlay
-    container_name: docker_ros2_test_dev_container
-    image: docker_ros2_test:dev
+      file: humble-base-compose.yml
+      service: humble_overlay
+    container_name: sctebot2_ros2_humble_dev
+    image: sctebot2_ros2_humble_dev:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile
-      target: dev
+      dockerfile: docker_files/Dockerfile_humble_dev
+      target: humble_dev
     volumes:
      # mount the source code
       - ../../sctebot2_robot:/overlay_ws/src/sctebot2_robot:rw

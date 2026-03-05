@@ -2,21 +2,21 @@ services:
   # realsense overlay container
   realsense_overlay:    
     extends: 
-      file: ../../base/base-compose.yml
-      service: overlay
-    container_name: docker_ros2_test_realsense_overlay_container
-    image: docker_ros2_test:realsense_overlay    
+      file: jazzy-base-compose.yml
+      service: jazzy_overlay
+    container_name: sctebot2_ros2_realsense_overlay
+    image: sctebot2_ros2_realsense_overlay:latest
     build:
-      context: ../../
-      dockerfile: docker_files/Dockerfile
+      context: ../
+      dockerfile: docker_files/Dockerfile_realsense
       target: realsense_overlay
 
   # realsense node container
   # Use v4l2-ctl --list-devices to figure out what /dev/videoX are associated with the RealSense Camera
   realsense_node:
     extends: realsense_overlay
-    container_name: docker_ros2_test_realsense_node_container
-    image: docker_ros2_test:realsense_node
+    container_name: sctebot2_ros2_realsense_node
+    image: sctebot2_ros2_realsense_node:latest
     devices:
       - "/dev/bus/usb/006/003:/dev/bus/usb/006/003"
       - "/dev/video4:/dev/video4"
@@ -28,8 +28,8 @@ services:
       - "/dev/media1:/dev/media1"
       - "/dev/media2:/dev/media2"
     build:
-      context: ../../
-      dockerfile: docker_files/Dockerfile
+      context: ../
+      dockerfile: docker_files/Dockerfile_realsense
       target: realsense_node
     volumes:
       - ../../sctebot2_sensors/realsense-ros:/realsense_ws/src/realsense-ros:rw

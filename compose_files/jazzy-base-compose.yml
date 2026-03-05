@@ -1,14 +1,14 @@
 services:
   # base ros2 docker image
-  base:  
-    image: docker_ros2_test:base
-    container_name: docker_ros2_test_base_container
+  jazzy_base:
+    image: sctebot2_ros2_jazzy_base:latest
+    container_name: sctebot2_ros2_jazzy_base
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile
+      dockerfile: docker_files/Dockerfile_jazzy_base
       args:
         ROS_DISTRO: ${ROS_DISTRO:?}
-      target: base
+      target: jazzy_base
     stdin_open: true
     tty: true
 
@@ -29,11 +29,11 @@ services:
       - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
   
   # project overlay docker image
-  overlay:
-    extends: base
-    container_name: docker_ros2_test_overlay_container
-    image: docker_ros2_test:overlay
+  jazzy_overlay:
+    extends: jazzy_base
+    container_name: sctebot2_ros2_jazzy_overlay
+    image: sctebot2_ros2_jazzy_overlay:latest
     build:
       context: ../
-      dockerfile: docker_files/Dockerfile
-      target: overlay
+      dockerfile: docker_files/Dockerfile_jazzy_base
+      target: jazzy_overlay
