@@ -1,7 +1,7 @@
 ####################
 ### REALSENSE OVERLAY
 ####################
-FROM sctebot2_ros2_jazzy_base:latest AS realsense_overlay
+FROM sctebot2_jazzy_base:latest AS realsense_overlay
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   libglfw3 libglfw3-dev ros-${ROS_DISTRO}-diagnostic-updater
@@ -15,14 +15,15 @@ RUN mkdir -p /etc/apt/keyrings \
 
 RUN apt-get update && apt-get install -y librealsense2 ros-jazzy-realsense2-*
 
-RUN mkdir -p /realsense_ws/src
-WORKDIR /realsense_ws
-
-RUN . /docker_ros2_ws/install/setup.bash \
-  && rosdep update \
-  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
-  && colcon build --symlink-install \
-  && . /realsense_ws/install/setup.bash
+# RUN mkdir -p /realsense_ws/src
+# WORKDIR /realsense_ws
+#RUN . /opt/ros/$ROS_DISTRO/setup.bash \
+#  && . /docker_ros2_ws/install/setup.bash \
+#  && rosdep update \
+#  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+#  && colcon build --symlink-install \
+#  && VERBOSE=1 colcon build --event-handlers console_direct+ > build_report.txt \
+#  && . /realsense_ws/install/setup.bash
 
 # Set up the entrypoint
 COPY ../docker_files/scripts/entrypoint.sh /
@@ -53,6 +54,7 @@ RUN groupadd --gid $GID $USERNAME \
   && chown -R ${UID}:${GID} /home/${USERNAME}
 
 # Set the ownership of the overlay workspace to the new user
+RUN mkdir -p /realsense_ws/src
 RUN chown -R ${UID}:${GID} /realsense_ws/
 
 # Set up the entrypoint, including it in the .bashrc for interactive shells

@@ -1,7 +1,7 @@
 #################### 
 ### DEV IMAGE
 ####################
-FROM sctebot2_ros2_humble_overlay:latest AS humble_dev
+FROM sctebot2_humble_overlay:latest AS humble_dev
 
 # Dev container arguments
 ARG USERNAME=devuser

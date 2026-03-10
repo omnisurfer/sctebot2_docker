@@ -4,8 +4,8 @@ services:
     extends: 
       file: humble-base-compose.yml
       service: humble_overlay
-    container_name: sctebot2_ros2_humble_dev
-    image: sctebot2_ros2_humble_dev:latest    
+    container_name: sctebot2_humble_dev
+    image: sctebot2_humble_dev:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.humble_dev

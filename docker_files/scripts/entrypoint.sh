@@ -20,10 +20,36 @@ then
 fi
 
 # source realsense_overlay if built
-if [ -f /realsense_ws/install/setup.bash ]
+if [ -d /realsense_ws ]
 then
+
+    echo "Updating rosdep..."
+    rosdep update \
+    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y
+
+    echo "Building realsense_ws workspace..."
+    cd /realsense_ws && colcon build --symlink-install
+
     . /realsense_ws/install/setup.bash
     echo "Sourced realsense_ws workspace..."
+fi
+
+# source realsense_overlay if built
+if [ -d /ydlidar_ws ]
+then
+
+    echo "Updating rosdep..."
+    rosdep update \
+    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y
+
+    # build the workspace on entry...
+    # This is a hack since it seems building a bound volume folder does not work for unkown reasons and
+    # copying from folders above the level of the compose files is forbidden for security reasons.
+    echo "Building ydlidar_ws workspace..."
+    cd /ydlidar_ws && colcon build --symlink-install
+
+    . /ydlidar_ws/install/setup.bash
+    echo "Sourced ydlidar_ws workspace..."
 fi
 
 # execute the command passed into this entrypoint

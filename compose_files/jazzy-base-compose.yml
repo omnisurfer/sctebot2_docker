@@ -1,8 +1,8 @@
 services:
   # base ros2 docker image
   jazzy_base:
-    image: sctebot2_ros2_jazzy_base:latest
-    container_name: sctebot2_ros2_jazzy_base
+    image: sctebot2_jazzy_base:latest
+    container_name: sctebot2_jazzy_base
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.jazzy_base
@@ -31,8 +31,8 @@ services:
   # project overlay docker image
   jazzy_overlay:
     extends: jazzy_base
-    container_name: sctebot2_ros2_jazzy_overlay
-    image: sctebot2_ros2_jazzy_overlay:latest
+    container_name: sctebot2_jazzy_overlay
+    image: sctebot2_jazzy_overlay:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.jazzy_base

@@ -4,8 +4,8 @@ services:
     extends: 
       file: jazzy-base-compose.yml
       service: jazzy_overlay
-    container_name: sctebot2_ros2_jazzy_dev
-    image: sctebot2_ros2_jazzy_dev:latest
+    container_name: sctebot2_jazzy_dev
+    image: sctebot2_jazzy_dev:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.jazzy_dev

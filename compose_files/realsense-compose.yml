@@ -4,8 +4,8 @@ services:
     extends: 
       file: jazzy-base-compose.yml
       service: jazzy_overlay
-    container_name: sctebot2_ros2_realsense_overlay
-    image: sctebot2_ros2_realsense_overlay:latest
+    container_name: sctebot2_realsense_overlay
+    image: sctebot2_realsense_overlay:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.realsense
@@ -15,22 +15,24 @@ services:
   # Use v4l2-ctl --list-devices to figure out what /dev/videoX are associated with the RealSense Camera
   realsense_node:
     extends: realsense_overlay
-    container_name: sctebot2_ros2_realsense_node
-    image: sctebot2_ros2_realsense_node:latest
+    container_name: sctebot2_realsense_node
+    image: sctebot2_realsense_node:latest
     devices:
-      - "/dev/bus/usb/006/003:/dev/bus/usb/006/003"
+      # lsusb and v4l2-ctl --list-devices
+      # these numbers may change between plug/boot cycles.
+      - "/dev/bus/usb/010/004:/dev/bus/usb/010/004"
+      - "/dev/video0:/dev/video0"
+      - "/dev/video1:/dev/video1"
+      - "/dev/video2:/dev/video2"
+      - "/dev/video3:/dev/video3"
       - "/dev/video4:/dev/video4"
       - "/dev/video5:/dev/video5"
-      - "/dev/video6:/dev/video6"
-      - "/dev/video7:/dev/video7"
-      - "/dev/video8:/dev/video8"
-      - "/dev/video9:/dev/video9"
+      - "/dev/media0:/dev/media0"
       - "/dev/media1:/dev/media1"
-      - "/dev/media2:/dev/media2"
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.realsense
       target: realsense_node
     volumes:
-      - ../../sctebot2_sensors/realsense-ros:/realsense_ws/src/realsense-ros:rw
+      - ../../sctebot2_sensors/realsense-ros:/realsense_ws/src/realsense-ros:rw      
     command: sleep infinity

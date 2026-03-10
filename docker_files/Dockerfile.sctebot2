@@ -1,16 +1,26 @@
-#################### 
-### DEV IMAGE
 ####################
-FROM sctebot2_jazzy_overlay:latest AS jazzy_dev
+### SCTEBOT2 OVERLAY
+####################
+FROM sctebot2_jazzy_base:latest AS sctebot2_overlay
 
-# Dev container arguments
-ARG USERNAME=devuser
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libglfw3 libglfw3-dev ros-${ROS_DISTRO}-diagnostic-updater
+
+RUN mkdir -p /sctebot2_ws/src
+WORKDIR /sctebot2_ws
+
+RUN . /docker_ros2_ws/install/setup.bash \
+  && rosdep update \
+  && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y
+
+# Set up the entrypoint
+COPY ../docker_files/scripts/entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+# sctebot2 container arguments
+ARG USERNAME=sctebot2_user
 ARG UID=1000
 ARG GID=${UID}
-
-# Install extra tools for development
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  gdb gdbserver nano
 
 # In Ubuntu 24.04, there is already a user named "ubuntu" with UID 1000.
 # Delete this in the (common) event that the user on the host also has this UID.
@@ -27,7 +37,12 @@ RUN groupadd --gid $GID $USERNAME \
   && chown -R ${UID}:${GID} /home/${USERNAME}
 
 # Set the ownership of the overlay workspace to the new user
-RUN chown -R ${UID}:${GID} /overlay_ws/
+RUN chown -R ${UID}:${GID} /sctebot2_ws/
+
+####################
+### SCTEBOT2 DESCRIPTION OVERLAY
+####################
+FROM sctebot2_overlay AS sctebot2_description_node
 
 # Set up the entrypoint, including it in the .bashrc for interactive shells
 USER ${USERNAME}

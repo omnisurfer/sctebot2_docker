@@ -1,0 +1,21 @@
+services:
+  sctebot2-description_overlay:
+    extends: jazzy-base-compose.yml
+    service: jazzy_overlay
+  container_name: sctebot2_description_overlay
+  image: sctebot2_description_overlay:latest
+  build:
+    context: ../
+    dockerfile: docker_files/Dockerfile.sctebot2
+    target: sctebot2-description_overlay
+
+  sctebot2-description_node:
+    extends: sctebot2-description_overlay
+    container_name: sctebot2-description_node
+    image: sctebot2-description_node:latest
+  build:
+    context: ../
+    dockerfile: docker_files/Dockerfile.sctebot2
+    target: sctebot2-description_node
+  volumes:
+    - ../../sctebot2:/sctebot2_ws:rw

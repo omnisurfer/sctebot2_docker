@@ -1,8 +1,8 @@
 services:
   # base ros2 docker image
   humble_base:
-    image: sctebot2_ros2_humble_base:latest
-    container_name: sctebot2_ros2_hubmle_base
+    image: sctebot2_humble_base:latest
+    container_name: sctebot2_hubmle_base
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.humble_base
@@ -31,8 +31,8 @@ services:
   # project overlay docker image
   humble_overlay:
     extends: humble_base
-    container_name: sctebot2_ros2_humble_overlay
-    image: sctebot2_ros2_humble_overlay:latest
+    container_name: sctebot2_humble_overlay
+    image: sctebot2_humble_overlay:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.humble_base

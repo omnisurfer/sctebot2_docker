@@ -4,8 +4,8 @@ services:
     extends: 
       file: jazzy-base-compose.yml
       service: jazzy_overlay
-    container_name: sctebot2_ros2_ydlidar_overlay
-    image: sctebot2_ros2_ydlidar_overlay:latest
+    container_name: sctebot2_ydlidar_overlay
+    image: sctebot2_ydlidar_overlay:latest
     build:
       context: ../
       dockerfile: docker_files/Dockerfile.ydlidar
@@ -14,8 +14,8 @@ services:
   # ydlidar node container  
   ydlidar_node:
     extends: ydlidar_overlay
-    container_name: sctebot2_ros2_ydlidar_node
-    image: sctebot2_ros2_ydlidar_node:latest
+    container_name: sctebot2_ydlidar_node
+    image: sctebot2_ydlidar_node:latest
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"
     build:

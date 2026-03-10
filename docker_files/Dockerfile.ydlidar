@@ -1,9 +1,12 @@
 ####################
 ### YDLIDAR OVERLAY
 ####################
-FROM sctebot2_ros2_jazzy_base:latest AS ydlidar_overlay
+FROM sctebot2_jazzy_base:latest AS ydlidar_overlay
 
 # RUN sudo apt-get install udev
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libglfw3 libglfw3-dev ros-${ROS_DISTRO}-diagnostic-updater udev
 
 # Install YDLIDAR SDK
 RUN mkdir -p /ydlidar_sdk/src
@@ -52,11 +55,18 @@ USER ${USERNAME}
 
 # BUILD UNDER USER to get past rosdep root warning. Seems to be building as if there is no source code present when the command executes...
 WORKDIR /ydlidar_ws
-RUN . /docker_ros2_ws/install/setup.bash \
-    && rosdep update \
-    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
-    # && colcon build --symlink-install \
-    && VERBOSE=1 colcon build --event-handlers console_direct+ > build_report.txt \
-    && . /ydlidar_ws/install/setup.bash
+# RUN . /opt/ros/${ROS_DISTRO}/setup.bash && colcon build
+# It seems colcon build will only work during compose when the files are copied into the container.
+# Otherwise must log into the container and build it manually...
+# And only files at or below the same folder depth can be accessed to copy from for security...
+# COPY docker_files/ydlidar_ros2_driver /ydlidar_ws/src/ydlidar_ros2_driver
+# RUN /bin/bash -c "source /opt/ros/jazzy/setup.bash; colcon build --symlink-install"
+# RUN . /opt/ros/$ROS_DISTRO/setup.bash \
+#    && . /docker_ros2_ws/install/setup.bash \
+#    && rosdep update \
+#    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \    
+#    && colcon build --symlink-install \
+#    && VERBOSE=1 colcon build --event-handlers console_direct+ > build_report.txt \
+#    && . /ydlidar_ws/install/setup.bash
 
 RUN echo "source /entrypoint.sh" >> /home/${USERNAME}/.bashrc

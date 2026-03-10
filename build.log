@@ -1,0 +1,223 @@
+ Image sctebot2_realsense_node:latest Pulling 
+ Image sctebot2_realsense_overlay:latest Pulling 
+ Image sctebot2_realsense_node:latest pull access denied for sctebot2_realsense_node, repository does not exist or may require 'docker login' 
+ Image sctebot2_realsense_overlay:latest pull access denied for sctebot2_realsense_overlay, repository does not exist or may require 'docker login' 
+ Image sctebot2_humble_overlay:latest Building 
+ Image sctebot2_realsense_overlay:latest Building 
+ Image sctebot2_jazzy_overlay:latest Building 
+ Image sctebot2_humble_base:latest Building 
+ Image sctebot2_jazzy_base:latest Building 
+ Image sctebot2_realsense_node:latest Building 
+ Image sctebot2_ydlidar_overlay:latest Building 
+ Image sctebot2_ydlidar_node:latest Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 5.26kB done
+#1 DONE 0.0s
+
+#2 [realsense_node internal] load build definition from Dockerfile.realsense
+#2 transferring dockerfile: 2.40kB done
+#2 DONE 0.0s
+
+#3 [realsense_overlay internal] load metadata for docker.io/library/sctebot2_jazzy_base:latest
+#3 DONE 0.0s
+
+#4 [realsense_node internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [realsense_overlay internal] load build context
+#5 transferring context: 128B done
+#5 DONE 0.0s
+
+#6 [realsense_overlay realsense_overlay 1/8] FROM docker.io/library/sctebot2_jazzy_base:latest@sha256:1d0dc3563d70fd0b0ed5e0cc2519647367b80dcfca59cc3e01c9b021b3339ead
+#6 resolve docker.io/library/sctebot2_jazzy_base:latest@sha256:1d0dc3563d70fd0b0ed5e0cc2519647367b80dcfca59cc3e01c9b021b3339ead 0.0s done
+#6 DONE 0.0s
+
+#7 [realsense_node realsense_overlay 2/8] RUN apt-get update && apt-get install -y --no-install-recommends   libglfw3 libglfw3-dev ros-jazzy-diagnostic-updater
+#7 CACHED
+
+#8 [realsense_node realsense_overlay 3/8] RUN mkdir -p /etc/apt/keyrings   && curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null   && echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" |   sudo tee /etc/apt/sources.list.d/librealsense.list   && apt-get update
+#8 CACHED
+
+#9 [realsense_node realsense_overlay 4/8] RUN apt-get update && apt-get install -y librealsense2 ros-jazzy-realsense2-*
+#9 CACHED
+
+#10 [realsense_node realsense_overlay 5/8] RUN mkdir -p /realsense_ws/src
+#10 CACHED
+
+#11 [realsense_node realsense_overlay 6/8] WORKDIR /realsense_ws
+#11 CACHED
+
+#12 [realsense_node realsense_overlay 7/8] RUN . /opt/ros/jazzy/setup.bash   && . /docker_ros2_ws/install/setup.bash   && rosdep update   && rosdep install --from-paths src --ignore-src --rosdistro jazzy -y   && colcon build --symlink-install   && VERBOSE=1 colcon build --event-handlers console_direct+ > build_report.txt   && . /realsense_ws/install/setup.bash
+#12 0.488 /usr/bin/rosdep:6: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+#12 0.488   from pkg_resources import load_entry_point
+#12 0.618 Warning: running 'rosdep update' as root is not recommended.
+#12 0.618   You should run 'sudo rosdep fix-permissions' and invoke 'rosdep update' again without sudo.
+#12 4.876 reading in sources list data from /etc/ros/rosdep/sources.list.d
+#12 4.876 Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/osx-homebrew.yaml
+#12 4.876 Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/base.yaml
+#12 4.876 Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/python.yaml
+#12 4.876 Hit https://raw.githubusercontent.com/ros/rosdistro/master/rosdep/ruby.yaml
+#12 4.876 Hit https://raw.githubusercontent.com/ros/rosdistro/master/releases/fuerte.yaml
+#12 4.876 Query rosdistro index https://raw.githubusercontent.com/ros/rosdistro/master/index-v4.yaml
+#12 4.876 Skip end-of-life distro "ardent"
+#12 4.876 Skip end-of-life distro "bouncy"
+#12 4.876 Skip end-of-life distro "crystal"
+#12 4.876 Skip end-of-life distro "dashing"
+#12 4.876 Skip end-of-life distro "eloquent"
+#12 4.876 Skip end-of-life distro "foxy"
+#12 4.876 Skip end-of-life distro "galactic"
+#12 4.876 Skip end-of-life distro "groovy"
+#12 4.876 Add distro "humble"
+#12 4.876 Skip end-of-life distro "hydro"
+#12 4.876 Skip end-of-life distro "indigo"
+#12 4.876 Skip end-of-life distro "iron"
+#12 4.876 Skip end-of-life distro "jade"
+#12 4.876 Add distro "jazzy"
+#12 4.876 Add distro "kilted"
+#12 4.876 Skip end-of-life distro "kinetic"
+#12 4.876 Skip end-of-life distro "lunar"
+#12 4.876 Skip end-of-life distro "melodic"
+#12 4.876 Skip end-of-life distro "noetic"
+#12 4.876 Add distro "rolling"
+#12 4.876 updated cache in /root/.ros/rosdep/sources.cache
+#12 4.960 /usr/bin/rosdep:6: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+#12 4.960   from pkg_resources import load_entry_point
+#12 5.114 #All required rosdeps installed successfully
+#12 5.343 
+#12 5.343 Summary: 0 packages finished [0.09s]
+#12 DONE 5.8s
+
+#13 [realsense_node realsense_overlay 8/8] COPY ../docker_files/scripts/entrypoint.sh /
+#13 DONE 0.0s
+
+#14 [realsense_overlay] exporting to image
+#14 exporting layers
+#14 exporting layers 0.2s done
+#14 ...
+
+#15 [realsense_node realsense_node 1/4] RUN touch /var/mail/ubuntu   && chown ubuntu /var/mail/ubuntu   && userdel -r ubuntu
+#15 DONE 0.3s
+
+#14 [realsense_overlay] exporting to image
+#14 exporting manifest sha256:65f5981c524d7415a34e3e732e5958a8788b13f0658a3d4f45ad8df493b08d1e 0.0s done
+#14 exporting config sha256:9f27d599e68fe5a739bddf8da3a109b124e5b5aa63260dc9a872de4f13e1431e 0.0s done
+#14 exporting attestation manifest sha256:ad639b72f6531ad8137f652612c76daf1dae9b18fecc007585ebd5f186ddf9ca 0.1s done
+#14 exporting manifest list sha256:de302d484d1d20966b94a83ecc7550c75a6308f24cca52b5853865c52cb5e0d9
+#14 exporting manifest list sha256:de302d484d1d20966b94a83ecc7550c75a6308f24cca52b5853865c52cb5e0d9 0.0s done
+#14 naming to docker.io/library/sctebot2_realsense_overlay:latest done
+#14 unpacking to docker.io/library/sctebot2_realsense_overlay:latest
+#14 ...
+
+#16 [realsense_node realsense_node 2/4] RUN groupadd --gid 1000 realsense_user   && useradd --uid 1000 --gid 1000 --create-home realsense_user   && echo realsense_user ALL=(root) NOPASSWD:ALL > /etc/sudoers.d/realsense_user   && chmod 0440 /etc/sudoers.d/realsense_user   && mkdir -p /home/realsense_user   && chown -R 1000:1000 /home/realsense_user
+#16 DONE 0.3s
+
+#17 [realsense_node realsense_node 3/4] RUN chown -R 1000:1000 /realsense_ws/
+#17 DONE 0.3s
+
+#14 [realsense_overlay] exporting to image
+#14 ...
+
+#18 [realsense_node realsense_node 4/4] RUN echo "source /entrypoint.sh" >> /home/realsense_user/.bashrc
+#18 DONE 0.2s
+
+#19 [realsense_node] exporting to image
+#19 exporting layers 0.2s done
+#19 exporting manifest sha256:0368ba129b4aace1215fb1f439686d17e3ab1692c8c4f9e97df26bcecd475337 0.0s done
+#19 exporting config sha256:07df3048f28ab6ac267b794165c86f3be1185be6069631d3a37e95b491966249 0.0s done
+#19 exporting attestation manifest sha256:f42ef62758a52b026625264d9ad9a2d98ac1092f2408c586aae755e035a9e43a 0.0s done
+#19 exporting manifest list sha256:3fac795c0cbb070d3cf82beed9ea1ef826da57bddbb8441766e1ada6c5de577a 0.0s done
+#19 naming to docker.io/library/sctebot2_realsense_node:latest done
+#19 unpacking to docker.io/library/sctebot2_realsense_node:latest
+#19 ...
+
+#14 [realsense_overlay] exporting to image
+#14 unpacking to docker.io/library/sctebot2_realsense_overlay:latest 2.3s done
+#14 DONE 2.7s
+
+#20 [realsense_overlay] resolving provenance for metadata file
+#20 DONE 0.0s
+
+#19 [realsense_node] exporting to image
+#19 unpacking to docker.io/library/sctebot2_realsense_node:latest 2.1s done
+#19 DONE 2.4s
+
+#21 [realsense_node] resolving provenance for metadata file
+#21 DONE 0.0s
+ Image sctebot2_realsense_overlay:latest Built 
+ Image sctebot2_realsense_node:latest Built 
+ Container sctebot2_ydlidar_node Creating 
+ Container sctebot2_ydlidar_overlay Creating 
+ Container sctebot2_realsense_node Creating 
+ Container sctebot2_realsense_overlay Creating 
+ Container sctebot2_ydlidar_overlay Created 
+ Container sctebot2_realsense_node Created 
+ Container sctebot2_realsense_overlay Created 
+ Container sctebot2_ydlidar_node Created 
+Attaching to sctebot2_hubmle_base, sctebot2_humble_overlay, sctebot2_jazzy_base, sctebot2_jazzy_overlay, sctebot2_realsense_node, sctebot2_realsense_overlay, sctebot2_ydlidar_node, sctebot2_ydlidar_overlay
+ Container sctebot2_jazzy_overlay Starting 
+ Container sctebot2_hubmle_base Starting 
+ Container sctebot2_humble_overlay Starting 
+ Container sctebot2_jazzy_base Starting 
+ Container sctebot2_realsense_overlay Starting 
+ Container sctebot2_realsense_node Starting 
+ Container sctebot2_ydlidar_overlay Starting 
+ Container sctebot2_ydlidar_node Starting 
+sctebot2_humble_overlay  | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_humble_overlay Started 
+sctebot2_jazzy_base      | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_jazzy_base Started 
+sctebot2_jazzy_overlay   | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_jazzy_overlay Started 
+sctebot2_hubmle_base     | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_hubmle_base Started 
+sctebot2_humble_overlay  | Sourced ROS2 humble
+sctebot2_realsense_overlay  | DOCKER ROS2 CONTAINER TESTS
+sctebot2_realsense_node     | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_realsense_overlay Started 
+ Container sctebot2_realsense_node Started 
+sctebot2_ydlidar_overlay    | DOCKER ROS2 CONTAINER TESTS
+ Container sctebot2_ydlidar_overlay Started 
+sctebot2_ydlidar_node       | DOCKER ROS2 CONTAINER TESTS
+sctebot2_hubmle_base        | Sourced ROS2 humble
+ Container sctebot2_ydlidar_node Started 
+sctebot2_jazzy_base         | Sourced ROS2 jazzy
+sctebot2_jazzy_overlay      | Sourced ROS2 jazzy
+sctebot2_humble_overlay     | Sourced docker_ros2_ws workspace...
+sctebot2_realsense_node     | Sourced ROS2 jazzy
+sctebot2_realsense_overlay  | Sourced ROS2 jazzy
+sctebot2_hubmle_base        | Sourced docker_ros2_ws workspace...
+sctebot2_ydlidar_overlay    | Sourced ROS2 jazzy
+sctebot2_ydlidar_node       | Sourced ROS2 jazzy
+sctebot2_jazzy_overlay      | Sourced docker_ros2_ws workspace...
+sctebot2_jazzy_base         | Sourced docker_ros2_ws workspace...
+[Ksctebot2_hubmle_base exited with code 0
+[Ksctebot2_jazzy_base exited with code 0
+sctebot2_humble_overlay     | Sourced overlay_ws workspace...
+[Ksctebot2_humble_overlay exited with code 0
+sctebot2_realsense_overlay  | Sourced docker_ros2_ws workspace...
+sctebot2_realsense_node     | Sourced docker_ros2_ws workspace...
+sctebot2_ydlidar_overlay    | Sourced docker_ros2_ws workspace...
+sctebot2_ydlidar_node       | Sourced docker_ros2_ws workspace...
+[Ksctebot2_ydlidar_overlay exited with code 0
+sctebot2_jazzy_overlay      | Sourced overlay_ws workspace...
+[Ksctebot2_jazzy_overlay exited with code 0
+sctebot2_realsense_overlay  | Sourced realsense_ws workspace...
+sctebot2_realsense_node     | Sourced realsense_ws workspace...
+[Ksctebot2_realsense_overlay exited with code 0
+ Compose Stopping Gracefully Stopping... press Ctrl+C again to force
+ Container sctebot2_humble_overlay Stopping 
+ Container sctebot2_hubmle_base Stopping 
+ Container sctebot2_jazzy_overlay Stopping 
+ Container sctebot2_realsense_node Stopping 
+ Container sctebot2_jazzy_base Stopping 
+ Container sctebot2_ydlidar_node Stopping 
+ Container sctebot2_realsense_overlay Stopping 
+ Container sctebot2_ydlidar_overlay Stopping 
+ Container sctebot2_humble_overlay Stopped 
+ Container sctebot2_realsense_overlay Stopped 
+ Container sctebot2_hubmle_base Stopped 
+ Container sctebot2_jazzy_overlay Stopped 
+ Container sctebot2_jazzy_base Stopped 
+ Container sctebot2_ydlidar_overlay Stopped 
+got 3 SIGTERM/SIGINTs, forcefully exiting
