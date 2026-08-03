@@ -40,7 +40,7 @@ RUN groupadd --gid $GID $USERNAME \
 RUN chown -R ${UID}:${GID} /sctebot2_ws/
 
 ####################
-### SCTEBOT2 DESCRIPTION OVERLAY
+### SCTEBOT2 DESCRIPTION NODE
 ####################
 FROM sctebot2_overlay AS sctebot2_description_node
 

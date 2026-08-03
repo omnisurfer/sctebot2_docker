@@ -52,5 +52,13 @@ then
     echo "Sourced ydlidar_ws workspace..."
 fi
 
+# source sctebot2_overlay if built
+if [ -d /sctebot2_ws ]
+then
+
+    echo "WORK IN PROGRESS TO BUILD SCTEBOT2 DESCRIPTION WORKSPACE"
+
+fi
+
 # execute the command passed into this entrypoint
 exec "$@"
